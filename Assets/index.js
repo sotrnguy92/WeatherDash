@@ -8,6 +8,7 @@ $(document).ready(function (){
     let citySearch;
     let citiesArr = [];
     let storedCities = JSON.parse(localStorage.getItem("cities"));
+    let $foreCast = $(".foreCast");
 
 
 
@@ -33,6 +34,7 @@ $(document).ready(function (){
             }
         }
         getWeather();
+        weatherForecast();
     }
 
 
@@ -45,6 +47,7 @@ $(document).ready(function (){
             return;
         }
         getWeather();
+        weatherForecast();
         citiesArr.push(citySearch);
         localStorage.setItem("cities", JSON.stringify(citiesArr));
         console.log($searchBar.val());
@@ -63,6 +66,7 @@ $(document).ready(function (){
         event.stopPropagation();
         $(".cityListItem").data("clicked", true);
         getWeather();
+        weatherForecast();
     });
 
 
@@ -139,6 +143,69 @@ $(document).ready(function (){
 
 
 
+        });
+    }
+
+    function weatherForecast() {
+        $foreCast.empty();
+
+        if ($searchBar.val()) {
+            citySearch = $.trim($searchBar.val());
+        }else if ($(".cityListItem").data("clicked")) {
+            citySearch = citySearch;
+        } else if (
+            citiesArr &&
+            !$searchBar.val() &&
+            !$(".cityListItem").data("clicked")
+        ) {
+            let mostRecentCity = citiesArr[citiesArr.length - 1];
+            citySearch = mostRecentCity;
+
+        }
+
+        $.ajax({
+            url:
+                "https://api.openweathermap.org/data/2.5/forecast?q=" +
+                citySearch +
+                "&appid=" +
+                apiKey +
+                "&units=imperial",
+            method: "GET",
+        }).then(function (response) {
+            let fiveDay = $("<div>")
+                .text(response.city.name + " 5-Day Forecast")
+                .addClass("col-12 d-flex justify-content-center fiveDay");
+            $foreCast.append(fiveDay);
+
+            // start at index 1 because index 0 is today
+            for (var i = 1; i < 6; i++) {
+                let nextDay = $("<div>").addClass("col-5 col-lg-2 pt-2 nextDay");
+
+                let date = $("<p>").text(moment().add(i, "days").format("ddd DD MMM"));
+
+                let temp = $("<p>").text(
+                    "Temp: " + Math.round(response.list[i].main.temp) + "ºF"
+                );
+
+                let humidity = $("<p>").text(
+                    "Humidity: " + Math.round(response.list[i].main.temp) + "%"
+                );
+
+                let description = $("<p>").text(
+                    response.list[i].weather[0].description
+                );
+
+                let icon = $("<img>").attr(
+                    "src",
+                    "https://openweathermap.org/img/wn/" +
+                    response.list[i].weather[0].icon +
+                    "@2x.png"
+                );
+
+                nextDay.append(date, description, icon, temp, humidity);
+                $foreCast.append(nextDay);
+
+            }
         });
     }
 
