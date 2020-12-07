@@ -51,6 +51,7 @@ $(document).ready(function (){
         citiesArr.push(citySearch);
         localStorage.setItem("cities", JSON.stringify(citiesArr));
         console.log($searchBar.val());
+        location.reload();
     })
 
     $(".trash").on("click", function(event) {
