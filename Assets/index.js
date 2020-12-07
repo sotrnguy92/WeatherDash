@@ -1,12 +1,35 @@
 $(document).ready(function (){
 
     let $searchBar = $("#searchBar");
+    let $citiesList = $(".citiesList");
     let $searchButton = $(".searchButton");
     let $weatherToday = $(".weatherToday");
     let $weatherStats = $(".weatherStats");
     let citySearch;
     let citiesArr = [];
+    let storedCities = JSON.parse(localStorage.getItem("cities"));
 
+
+
+
+
+    const openPage = () => {
+        console.log(storedCities)
+        if (storedCities){
+            citiesArr = storedCities
+            for ( let i =0; i < citiesArr.length; i++){
+                const savedCity = $("<p>").text(citiesArr[i]).attr("id", "city" + i);
+                const trashButton = $("<button/>").attr("type", "button").addClass("trash").text("delete")
+                trashButton.data('index', i);
+                savedCity.append(trashButton);
+                savedCity.addClass("cityListItem");
+                $citiesList.prepend(savedCity);
+
+            }
+        }
+    }
+
+    openPage();
 
     let apiKey = "7de6b07945dab56ba69075d82a6e9cc7";
 
