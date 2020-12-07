@@ -19,33 +19,43 @@
 <div class="jumbotron">
     <h1 class="display-4">Weather Dashboard</h1>
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <form>
+                <label for="searchBar">Search for a City:</label>
+                <br/>
+                <input placeholder="city name" id="searchBar" />
+                <button type="submit" class="searchButton btn btn-primary">Submit</button>
+            </form>
+            <div class="col-12 citiesList">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 " style="width: 18rem;">
+                <div class="weatherToday card-body">
+
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-4 " style="width: 18rem;" >
+                <div class="weatherStats card-body">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <aside class="col-md-3">
-        <form>
-            <label for="searchBar">Search for a City:</label>
-            <br/>
-            <input placeholder="city name" id="searchBar" />
-            <button type="submit" class="searchButton btn btn-primary">Submit</button>
-        </form>
-        <div class="col-12 searchResults"></div>
+
     </aside>
 </div>
 
-<div class="container">
-    <div class="card " style="width: 18rem;">
-        <div class="weatherToday card-body">
 
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="card " style="width: 18rem;" >
-        <div class="weatherStats card-body">
-        </div>
-    </div>
-</div>
 
 
 <!-- jQuery -->

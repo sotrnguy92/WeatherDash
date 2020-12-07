@@ -1,10 +1,35 @@
 $(document).ready(function (){
 
     let $searchBar = $("#searchBar");
+    let $citiesList = $(".citiesList");
     let $searchButton = $(".searchButton");
     let $weatherToday = $(".weatherToday");
     let $weatherStats = $(".weatherStats");
     let citySearch;
+    let citiesArr = [];
+    let storedCities = JSON.parse(localStorage.getItem("cities"));
+
+
+
+
+
+    const openPage = () => {
+        getWeather();
+        console.log(storedCities)
+        if (storedCities){
+            citiesArr = storedCities
+            for ( let i =0; i < citiesArr.length; i++){
+                const savedCity = $("<p>").text(citiesArr[i]).attr("id", "city" + i);
+                const trashButton = $("<button/>").attr("type", "button").addClass("trash").text("delete")
+                trashButton.data('index', i);
+                savedCity.append(trashButton);
+                savedCity.addClass("cityListItem");
+                $citiesList.prepend(savedCity);
+
+            }
+        }
+    }
+
 
     let apiKey = "7de6b07945dab56ba69075d82a6e9cc7";
 
@@ -14,14 +39,37 @@ $(document).ready(function (){
             return;
         }
         getWeather();
+        citiesArr.push(citySearch);
+        localStorage.setItem("cities", JSON.stringify(citiesArr));
         console.log($searchBar.val());
     })
 
+    $(".trash").on("click", function(event) {
+        event.stopPropagation();
+        console.log("Im clicked")
+        let trashButton = $(event.target);
+        let index = trashButton.data('index');
+        citiesArr.splice(index, 1);
+        localStorage.setItem("cities", JSON.stringify(citiesArr));
+        $('#' + trashButton.parent().attr("id")).remove();
+    });
+
+    // $(".cityListItem").on("click", function (event) {
+    //     event.stopPropagation();
+    //     $(".cityListItem").data("clicked", true);
+    //     getWeather();
+    // });
+
     const getWeather = () => {
+        $weatherStats.empty();
+        $weatherToday.empty();
+
         if ($searchBar.val()) {
             citySearch = $.trim($searchBar.val());
             // if city in left column has been clicked, use this value
         }
+
+
         let URL =
             "https://api.openweathermap.org/data/2.5/weather?q=" +
             citySearch +
@@ -38,6 +86,8 @@ $(document).ready(function (){
             if (response.sys.country == undefined) {
                 city.text(response.name);
             }
+
+
 
             let description = $("<p>").addClass("description card-text");
             description.text(response.weather[0].description);
@@ -76,5 +126,6 @@ $(document).ready(function (){
         });
     }
 
+    openPage();
 
 })
