@@ -2,9 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Weather Dash</title>
+
+    <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+
+    <!-- google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&family=Russo+One&display=swap" rel="stylesheet">
+
+
 </head>
 <body>
+
+<div class="jumbotron">
+    <h1 class="display-4">Weather Dashboard</h1>
+</div>
+
+<div class="row">
+    <aside class="col-md-3">
+        <form>
+            <label for="searchBar">Search for a City:</label>
+            <br/>
+            <input placeholder="city name" id="searchBar" />
+            <button type="submit" class="searchButton btn btn-primary">Submit</button>
+        </form>
+        <div class="col-12 searchResults"></div>
+    </aside>
+</div>
+
+<!-- jQuery -->
+<script
+        src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous"
+></script>
+
+<!-- moments -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+<script src="Assets/index.js"></script>
 
 </body>
 </html>
