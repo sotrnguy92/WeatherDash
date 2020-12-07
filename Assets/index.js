@@ -2,7 +2,7 @@ $(document).ready(function (){
 
     let $searchBar = $("#searchBar");
     let $citiesList = $(".citiesList");
-    let $searchButton = $(".searchButton");
+    // let $searchButton = $(".searchButton");
     let $weatherToday = $(".weatherToday");
     let $weatherStats = $(".weatherStats");
     let citySearch;
@@ -13,8 +13,12 @@ $(document).ready(function (){
 
 
 
-    const openPage = () => {
-        getWeather();
+    let apiKey = "7de6b07945dab56ba69075d82a6e9cc7";
+
+    openPage();
+
+    function openPage() {
+
         console.log(storedCities)
         if (storedCities){
             citiesArr = storedCities
@@ -28,10 +32,12 @@ $(document).ready(function (){
 
             }
         }
+        getWeather();
     }
 
 
-    let apiKey = "7de6b07945dab56ba69075d82a6e9cc7";
+
+
 
     $("form").on("submit", (e) =>{
         e.preventDefault();
@@ -46,27 +52,37 @@ $(document).ready(function (){
 
     $(".trash").on("click", function(event) {
         event.stopPropagation();
-        console.log("Im clicked")
-        let trashButton = $(event.target);
-        let index = trashButton.data('index');
+        let trashIcon = $(event.target);
+        let index = trashIcon.data('index');
         citiesArr.splice(index, 1);
         localStorage.setItem("cities", JSON.stringify(citiesArr));
-        $('#' + trashButton.parent().attr("id")).remove();
+        $('#' + trashIcon.parent().attr("id")).remove();
     });
 
-    // $(".cityListItem").on("click", function (event) {
-    //     event.stopPropagation();
-    //     $(".cityListItem").data("clicked", true);
-    //     getWeather();
-    // });
+    $(".cityListItem").on("click", function (event) {
+        event.stopPropagation();
+        $(".cityListItem").data("clicked", true);
+        getWeather();
+    });
 
-    const getWeather = () => {
+
+    function getWeather() {
         $weatherStats.empty();
         $weatherToday.empty();
 
         if ($searchBar.val()) {
             citySearch = $.trim($searchBar.val());
-            // if city in left column has been clicked, use this value
+        }else if ($(".cityListItem").data("clicked")) {
+            citySearch = $(event.target).text();
+            citySearch = citySearch.slice(0, citySearch.length-6)
+        } else if (
+            citiesArr &&
+            !$searchBar.val() &&
+            !$(".cityListItem").data("clicked")
+        ) {
+            let mostRecentCity = citiesArr[citiesArr.length - 1];
+            citySearch = mostRecentCity;
+
         }
 
 
@@ -83,7 +99,7 @@ $(document).ready(function (){
         }).then(function (response) {
             let city = $("<h4>").addClass("city card-title");
             city.text(response.name + ", " + response.sys.country);
-            if (response.sys.country == undefined) {
+            if (response.sys.country === undefined) {
                 city.text(response.name);
             }
 
@@ -126,6 +142,5 @@ $(document).ready(function (){
         });
     }
 
-    openPage();
 
 })
