@@ -44,6 +44,16 @@ $(document).ready(function (){
         console.log($searchBar.val());
     })
 
+    $(".trash").on("click", function(event) {
+        event.stopPropagation();
+        let trashButton = $(event.target);
+        let index = trashButton.data('index');
+        citiesArr.splice(index, 1);
+        localStorage.setItem("cities", JSON.stringify(citiesArr));
+        $('#' + trashButton.parent().attr("id")).remove();
+    });
+
+
     const getWeather = () => {
         $weatherStats.empty();
         $weatherToday.empty();
