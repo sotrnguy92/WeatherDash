@@ -5,6 +5,8 @@ $(document).ready(function (){
     let $weatherToday = $(".weatherToday");
     let $weatherStats = $(".weatherStats");
     let citySearch;
+    let citiesArr = [];
+
 
     let apiKey = "7de6b07945dab56ba69075d82a6e9cc7";
 
@@ -14,10 +16,15 @@ $(document).ready(function (){
             return;
         }
         getWeather();
+        citiesArr.push(citySearch);
+        localStorage.setItem("cities", JSON.stringify(citiesArr));
         console.log($searchBar.val());
     })
 
     const getWeather = () => {
+        $weatherStats.empty();
+        $weatherToday.empty();
+
         if ($searchBar.val()) {
             citySearch = $.trim($searchBar.val());
             // if city in left column has been clicked, use this value
